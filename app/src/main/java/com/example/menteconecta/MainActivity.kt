@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
 
-
                 remember {
                     UserSession.rolActivo = "paciente"
                     UserSession.rolActivo
@@ -64,7 +63,6 @@ class MainActivity : ComponentActivity() {
                             composable("psicologos_lista") { PsicologosScreen(navController) }
                             composable("psiquiatras_lista") { PsiquiatrasScreen(navController) }
 
-
                             composable("historia_clinica_paciente") {
                                 HistoriaClinicaScreen(navController)
                             }
@@ -73,10 +71,11 @@ class MainActivity : ComponentActivity() {
                             composable("home_doctor") { HomeDoctorScreen(navController) }
                             composable("pacientes_lista") { PacientesListaScreen(navController) }
 
-
                             composable("historia_clinica_doctor/{pacienteNombre}") { backStackEntry ->
                                 val nombre = backStackEntry.arguments?.getString("pacienteNombre") ?: "Paciente"
-                                HistoriaClinicaDoctorScreen(navController, nombre)
+
+
+                                HistoriaClinicaDoctorScreen(pacienteNombre = nombre, navController = navController)
                             }
                         }
                     }

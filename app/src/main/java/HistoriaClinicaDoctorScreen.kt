@@ -14,27 +14,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun HistoriaClinicaScreen(navController: NavController, pacienteNombre: String) {
+fun HistoriaClinicaDoctorScreen(navController: NavController, pacienteNombre: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
         Text(
-            text = "Historia Clínica",
+            text = "Historia Clínica (Doctor)",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
-
         Text(
             text = "Paciente: $pacienteNombre",
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium
         )
-
-
     }
 }
