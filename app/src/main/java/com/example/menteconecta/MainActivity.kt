@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,19 +32,19 @@ class MainActivity : ComponentActivity() {
                 val currentRoute = navBackStackEntry?.destination?.route
 
 
-                var rolActivo by remember { mutableStateOf("paciente") }
+                remember {
+                    UserSession.rolActivo = "paciente"
+                    UserSession.rolActivo
+                }
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
-
                         if (currentRoute != "login") {
-
                             BottomNavigationBar(navController = navController)
                         }
                     }
                 ) { innerPadding ->
-
                     Box(modifier = Modifier.padding(innerPadding)) {
                         NavHost(
                             navController = navController,
@@ -67,15 +65,18 @@ class MainActivity : ComponentActivity() {
                             composable("psiquiatras_lista") { PsiquiatrasScreen(navController) }
 
 
+                            composable("historia_clinica_paciente") {
+                                HistoriaClinicaScreen(navController)
+                            }
+
+
                             composable("home_doctor") { HomeDoctorScreen(navController) }
-
-
                             composable("pacientes_lista") { PacientesListaScreen(navController) }
 
 
-                            composable("historia_clinica/{pacienteNombre}") { backStackEntry ->
+                            composable("historia_clinica_doctor/{pacienteNombre}") { backStackEntry ->
                                 val nombre = backStackEntry.arguments?.getString("pacienteNombre") ?: "Paciente"
-                                HistoriaClinicaScreen(navController, nombre)
+                                HistoriaClinicaDoctorScreen(navController, nombre)
                             }
                         }
                     }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -161,14 +160,11 @@ fun PacientesListaScreen(navController: NavController) {
                                 Spacer(modifier = Modifier.height(10.dp))
                                 Button(
                                     onClick = {
-                                        navController.navigate("historia_clinica/${paciente.nombre}")
+                                        navController.navigate("historia_clinica_doctor/${paciente.nombre}")
                                     },
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E90FF)),
-                                    shape = RoundedCornerShape(6.dp),
-                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-                                    modifier = Modifier.height(28.dp)
+
                                 ) {
-                                    Text("Historia Clinica", color = Color.White, fontSize = 12.sp)
+                                    Text("Historia Clinica")
                                 }
                             }
                         }
