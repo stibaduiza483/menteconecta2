@@ -1,6 +1,7 @@
 package com.example.menteconecta
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,64 +24,66 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun HistoriaClinicaScreen(navController: NavController) {
+fun HistoriaClinica(navController: NavController) {
     val darkBlue = Color(0xFF1A237E)
     val lightBlue = Color(0xFF2196F3)
 
     Scaffold { padding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFF0F7F8))
                 .padding(padding)
-                .padding(20.dp)
         ) {
-            item {
-                Text(
-                    text = "HISTORIA CLÍNICA",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = darkBlue
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-            }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp)
+            ) {
+                item {
+                    Text(
+                        text = "HISTORIA CLÍNICA",
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = darkBlue
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
 
+                item {
+                    InfoCardPaciente(
+                        titulo = "Resumen del Paciente",
+                        contenido = "Paciente: Nikolay Borrero\nID: 1002345678\nÚltima actualización: 12 Mayo 2026",
+                        colorBorde = lightBlue
+                    )
+                }
 
-            item {
-                InfoCard(
-                    titulo = "Resumen del Paciente",
-                    contenido = "Paciente: Nikolay Borrero\nID: 1002345678\nÚltima actualización: 12 Mayo 2026",
-                    colorBorde = lightBlue
-                )
-            }
+                item { Spacer(modifier = Modifier.height(16.dp)) }
 
-            item { Spacer(modifier = Modifier.height(16.dp)) }
+                item {
+                    InfoCardPaciente(
+                        titulo = "Evolución Médica",
+                        contenido = "El paciente muestra una mejora progresiva en su estado de ánimo. Se recomienda continuar con la terapia cognitivo-conductual. Próxima revisión en 15 días.",
+                        colorBorde = Color.Gray
+                    )
+                }
 
+                item { Spacer(modifier = Modifier.height(16.dp)) }
 
-            item {
-                InfoCard(
-                    titulo = "Evolución Médica",
-                    contenido = "El paciente muestra una mejora progresiva en su estado de ánimo. Se recomienda continuar con la terapia cognitivo-conductual. Próxima revisión en 15 días.",
-                    colorBorde = Color.Gray
-                )
-            }
-
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-
-
-            item {
-                InfoCard(
-                    titulo = "Diagnóstico Actual",
-                    contenido = "F41.1 - Trastorno de ansiedad generalizada.\nEstado: En tratamiento activo.",
-                    colorBorde = Color(0xFFFF5252)
-                )
+                item {
+                    InfoCardPaciente(
+                        titulo = "Diagnóstico Actual",
+                        contenido = "F41.1 - Trastorno de ansiedad generalizada.\nEstado: En tratamiento activo.",
+                        colorBorde = Color(0xFFFF5252)
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun InfoCard(titulo: String, contenido: String, colorBorde: Color) {
+fun InfoCardPaciente(titulo: String, contenido: String, colorBorde: Color) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(15.dp),

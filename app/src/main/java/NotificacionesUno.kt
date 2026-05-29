@@ -1,3 +1,5 @@
+package com.example.menteconecta
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,19 +31,55 @@ import androidx.navigation.NavController
 
 @Composable
 fun NotificacionesUno(navController: NavController) {
-    val lista = listOf("Laura Gomez" to "Ha editado tu historia clínica", "Sandra" to "Ha editado tu historia clínica", "Andres Martin" to "Ha editado tu historia clínica")
 
-    Scaffold(bottomBar = {  }) { padding ->
-        Column(modifier = Modifier.fillMaxSize().background(Color(0xFFF0F7F8)).padding(padding).padding(horizontal = 20.dp)) {
+    val lista = listOf(
+        "Laura Gomez" to "Ha editado tu historia clínica",
+        "Sandra" to "Ha editado tu historia clínica",
+        "Andres Martin" to "Ha editado tu historia clínica"
+    )
+
+    Scaffold(
+        bottomBar = {
+
+            com.example.menteconecta.ui.theme.BottomNavigationBar(navController = navController)
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF0F7F8))
+                .padding(padding)
+                .padding(horizontal = 20.dp)
+        ) {
             Spacer(modifier = Modifier.height(30.dp))
-            Text("Notificaciones", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A237E))
+            Text(
+                text = "Notificaciones",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1A237E)
+            )
             Spacer(modifier = Modifier.height(25.dp))
 
             LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 items(lista) { item ->
-                    Card(modifier = Modifier.fillMaxWidth().height(85.dp), shape = RoundedCornerShape(15.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
-                        Row(modifier = Modifier.fillMaxSize().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Surface(modifier = Modifier.size(45.dp), shape = CircleShape, color = Color(0xFFD9D9D9)) {}
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(85.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Surface(
+                                modifier = Modifier.size(45.dp),
+                                shape = CircleShape,
+                                color = Color(0xFFD9D9D9)
+                            ) {}
                             Spacer(modifier = Modifier.width(16.dp))
                             Column {
                                 Text(item.first, fontWeight = FontWeight.Bold, fontSize = 16.sp)

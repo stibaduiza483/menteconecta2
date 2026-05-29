@@ -41,7 +41,12 @@ fun FormulasScreen(navController: NavController) {
     val filtros = listOf("Todo", "Formulas", "Psicología", "Psiquiatría")
     var filtroSeleccionado by remember { mutableStateOf("Formulas") }
 
-    Scaffold { padding ->
+    Scaffold(
+
+        bottomBar = {
+            com.example.menteconecta.ui.theme.BottomNavigationBar(navController = navController)
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -58,7 +63,6 @@ fun FormulasScreen(navController: NavController) {
             )
 
             Spacer(modifier = Modifier.height(15.dp))
-
 
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -78,7 +82,6 @@ fun FormulasScreen(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -114,7 +117,6 @@ fun FormulaCard() {
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -122,7 +124,6 @@ fun FormulaCard() {
                     .background(Color.White)
                     .padding(2.dp)
             ) {
-
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White,

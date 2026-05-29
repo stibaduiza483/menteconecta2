@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
@@ -38,122 +36,128 @@ import androidx.navigation.NavController
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Scaffold { padding ->
+    Scaffold(
 
-        LazyColumn(
+        bottomBar = {
+            com.example.menteconecta.ui.theme.BottomNavigationBar(navController = navController)
+        }
+    ) { padding ->
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFF0F7F8))
                 .padding(padding)
-                .padding(horizontal = 20.dp)
         ) {
-            item {
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    text = "HOME",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1A237E)
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-
-
-            item {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .clickable { navController.navigate("que_es_menteconecta") },
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF2196F3))
-                ) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        Text(
-                            text = "¿QUÉ ES MENTE CONECTA?",
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp)
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(
+                        text = "HOME",
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1A237E)
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
-                Spacer(modifier = Modifier.height(25.dp))
-            }
 
-
-            item {
-                Text(text = "Servicios", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(15.dp))
-
-
-                Box(modifier = Modifier.height(280.dp)) {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        horizontalArrangement = Arrangement.spacedBy(20.dp),
-                        verticalArrangement = Arrangement.spacedBy(20.dp),
-                        userScrollEnabled = false
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                            .clickable { navController.navigate("que_es_menteconecta") },
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF03A9F4))
                     ) {
-                        item {
-                            Box(modifier = Modifier.clickable { navController.navigate("calendario") }) {
+                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                            Text(
+                                text = "¿QUÉ ES MENTE CONECTA?",
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(25.dp))
+                }
+
+                item {
+                    Text(text = "Servicios", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(20.dp)
+                        ) {
+                            Box(modifier = Modifier.weight(1f).clickable { navController.navigate("calendario") }) {
                                 ServiceItem("Calendario", Icons.Default.DateRange)
                             }
-                        }
-                        item {
-                            Box(modifier = Modifier.clickable { navController.navigate("historia_clinica") }) {
+
+                            Box(modifier = Modifier.weight(1f).clickable { navController.navigate("historia_clinica_paciente") }) {
                                 ServiceItem("Historia", Icons.Default.Description)
                             }
                         }
-                        item {
-                            Box(modifier = Modifier.clickable { navController.navigate("formulas") }) {
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(20.dp)
+                        ) {
+                            Box(modifier = Modifier.weight(1f).clickable { navController.navigate("formulas") }) {
                                 ServiceItem("Formulas", Icons.Default.Description)
                             }
-                        }
-                        item {
-                            Box(modifier = Modifier.clickable { navController.navigate("especialista") }) {
+                            Box(modifier = Modifier.weight(1f).clickable { navController.navigate("especialista") }) {
                                 ServiceItem("Citas", Icons.Default.DateRange)
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(30.dp))
                 }
-                Spacer(modifier = Modifier.height(30.dp))
-            }
 
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = "Novedades", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                    Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null)
-                }
-                Spacer(modifier = Modifier.height(15.dp))
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "Novedades", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null)
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    NovedadItem(
-                        titulo = "Psicologo",
-                        nombre = "Laura Gomez",
-                        colorFondo = Color(0xFFD9D9D9),
-                        modifier = Modifier.weight(1f),
-                        onClick = { navController.navigate("psicologos_lista") }
-                    )
-                    NovedadItem(
-                        titulo = "Medicamento",
-                        nombre = "Sertralina",
-                        colorFondo = Color.White,
-                        modifier = Modifier.weight(1f),
-                        onClick = { navController.navigate("formulas") }
-                    )
-                    NovedadItem(
-                        titulo = "Psiquiatra",
-                        nombre = "Andres Martinez",
-                        colorFondo = Color(0xFFD9D9D9),
-                        modifier = Modifier.weight(1f),
-                        onClick = { navController.navigate("psiquiatras_lista") }
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        NovedadItem(
+                            titulo = "Psicologo",
+                            nombre = "Laura Gomez",
+                            colorFondo = Color(0xFFD9D9D9),
+                            modifier = Modifier.weight(1f),
+                            onClick = { navController.navigate("psicologos_lista") }
+                        )
+                        NovedadItem(
+                            titulo = "Medicamento",
+                            nombre = "Sertralina",
+                            colorFondo = Color.White,
+                            modifier = Modifier.weight(1f),
+                            onClick = { navController.navigate("formulas") }
+                        )
+                        NovedadItem(
+                            titulo = "Psiquiatra",
+                            nombre = "Andres Martinez",
+                            colorFondo = Color(0xFFD9D9D9),
+                            modifier = Modifier.weight(1f),
+                            onClick = { navController.navigate("psiquiatras_lista") }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
-                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
@@ -170,8 +174,7 @@ fun NovedadItem(titulo: String, nombre: String, colorFondo: Color, modifier: Mod
             colors = CardDefaults.cardColors(containerColor = colorFondo),
             elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
         ) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            }
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {}
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = titulo, fontSize = 11.sp, color = Color.Gray)

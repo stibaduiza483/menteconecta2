@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "112994006507",
+    "project_id": "menteconecta-c49e7",
+    "storage_bucket": "menteconecta-c49e7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112994006507:android:79df3092911544e663d5ae",
+        "android_client_info": {
+          "package_name": "com.example.menteconecta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM6DzlbR0dJseFaNlDKaOQyBPeARjp7Go"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -31,11 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
+
 @Composable
 fun LoginScreen(navController: NavController) {
-
     var esPacienteSelected by remember { mutableStateOf(true) }
-
     var email by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
 
@@ -50,7 +49,6 @@ fun LoginScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         Text(
             text = "MenteConecta",
             fontSize = 32.sp,
@@ -67,12 +65,10 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-
             Button(
                 onClick = { esPacienteSelected = true },
                 colors = ButtonDefaults.buttonColors(
@@ -80,15 +76,12 @@ fun LoginScreen(navController: NavController) {
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .width(130.dp)
-                    .height(42.dp)
+                modifier = Modifier.width(130.dp).height(42.dp)
             ) {
                 Text("Paciente", fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
 
             Spacer(modifier = Modifier.width(20.dp))
-
 
             Button(
                 onClick = { esPacienteSelected = false },
@@ -97,16 +90,13 @@ fun LoginScreen(navController: NavController) {
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .width(130.dp)
-                    .height(42.dp)
+                modifier = Modifier.width(130.dp).height(42.dp)
             ) {
                 Text("Especialista", fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
         }
 
         Spacer(modifier = Modifier.height(50.dp))
-
 
         TextField(
             value = email,
@@ -122,13 +112,10 @@ fun LoginScreen(navController: NavController) {
                 unfocusedIndicatorColor = Color.Transparent
             ),
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp)
+            modifier = Modifier.fillMaxWidth().height(54.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-
 
         TextField(
             value = contrasena,
@@ -145,9 +132,7 @@ fun LoginScreen(navController: NavController) {
                 unfocusedIndicatorColor = Color.Transparent
             ),
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp)
+            modifier = Modifier.fillMaxWidth().height(54.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -156,15 +141,13 @@ fun LoginScreen(navController: NavController) {
         Button(
             onClick = {
                 if (esPacienteSelected) {
-
                     UserSession.rolActivo = "paciente"
-                    navController.navigate("home") {
+                    navController.navigate("home_paciente") { // Lleva al Home del Paciente
                         popUpTo("login") { inclusive = true }
                     }
                 } else {
-
-                    UserSession.rolActivo = "especialista"
-                    navController.navigate("home_doctor") {
+                    UserSession.rolActivo = "doctor"
+                    navController.navigate("home_doctor") { // Lleva al Home del Doctor
                         popUpTo("login") { inclusive = true }
                     }
                 }
@@ -172,15 +155,12 @@ fun LoginScreen(navController: NavController) {
             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
             shape = RoundedCornerShape(10.dp),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
+            modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
             Text("Continue", color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Medium)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
 
         Text(
             text = "By clicking continue, you agree to our Terms of Service\nand Privacy Policy",

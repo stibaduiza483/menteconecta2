@@ -52,7 +52,12 @@ fun PacientesListaScreen(navController: NavController) {
         PacienteDoctor("5", "Danna Murcia", "5d", "8 de octubre 9:30am", "7 años...", "Depresion", false)
     )
 
-    Scaffold { padding ->
+    Scaffold(
+
+        bottomBar = {
+            com.example.menteconecta.ui.theme.BottomNavigationBar(navController = navController)
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -61,7 +66,6 @@ fun PacientesListaScreen(navController: NavController) {
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(10.dp))
-
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -74,7 +78,6 @@ fun PacientesListaScreen(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.height(15.dp))
-
 
             Button(
                 onClick = { /* Lógica para añadir horarios */ },
@@ -94,7 +97,6 @@ fun PacientesListaScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -104,7 +106,6 @@ fun PacientesListaScreen(navController: NavController) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.Top
                     ) {
-
                         Box(
                             modifier = Modifier
                                 .padding(top = 6.dp, end = 8.dp)
@@ -115,7 +116,6 @@ fun PacientesListaScreen(navController: NavController) {
                                 )
                         )
 
-
                         Box(
                             modifier = Modifier
                                 .size(50.dp)
@@ -123,7 +123,6 @@ fun PacientesListaScreen(navController: NavController) {
                         )
 
                         Spacer(modifier = Modifier.width(12.dp))
-
 
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -145,7 +144,6 @@ fun PacientesListaScreen(navController: NavController) {
 
                             Spacer(modifier = Modifier.height(4.dp))
 
-
                             Column(
                                 modifier = Modifier
                                     .padding(start = 2.dp)
@@ -163,8 +161,10 @@ fun PacientesListaScreen(navController: NavController) {
                                         navController.navigate("historia_clinica_doctor/${paciente.nombre}")
                                     },
 
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E90FF)),
+                                    shape = RoundedCornerShape(8.dp)
                                 ) {
-                                    Text("Historia Clinica")
+                                    Text("Historia Clinica", color = Color.White)
                                 }
                             }
                         }

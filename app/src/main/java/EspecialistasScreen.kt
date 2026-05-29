@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun EspecialistaScreen(navController: NavController) {
+fun EspecialistasScreen(navController: NavController) {
     val lightBlue = Color(0xFFE3F2FD)
     val waveColor = Color(0xFF90CAF9)
 

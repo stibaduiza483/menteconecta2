@@ -1,3 +1,5 @@
+package com.example.menteconecta
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,7 +32,10 @@ fun PerfilScreen(navController: NavController) {
     val darkBlueText = Color(0xFF1A237E)
 
     Scaffold(
-        bottomBar = { }
+        bottomBar = {
+
+            com.example.menteconecta.ui.theme.BottomNavigationBar(navController = navController)
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -42,7 +47,6 @@ fun PerfilScreen(navController: NavController) {
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
-
             Text(
                 text = "PERFIL",
                 fontSize = 28.sp,
@@ -52,7 +56,6 @@ fun PerfilScreen(navController: NavController) {
             )
 
             Spacer(modifier = Modifier.height(30.dp))
-
 
             Card(
                 modifier = Modifier
@@ -78,7 +81,6 @@ fun PerfilScreen(navController: NavController) {
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
-
 
                     Column(
                         modifier = Modifier

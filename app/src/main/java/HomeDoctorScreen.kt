@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
-
 data class HomeDocPacienteItem(
     val nombre: String,
     val edad: String
@@ -51,7 +50,12 @@ fun HomeDoctorScreen(navController: NavController) {
         HomeDocPacienteItem("Miguel Torres", "22 años")
     )
 
-    Scaffold { paddingValues ->
+    Scaffold(
+
+        bottomBar = {
+            com.example.menteconecta.ui.theme.BottomNavigationBar(navController = navController)
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -60,7 +64,6 @@ fun HomeDoctorScreen(navController: NavController) {
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -73,7 +76,6 @@ fun HomeDoctorScreen(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-
 
             Box(
                 modifier = Modifier
@@ -106,7 +108,6 @@ fun HomeDoctorScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -128,15 +129,14 @@ fun HomeDoctorScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(24.dp)
             ) {
+
                 HomeDocAccesoItem("Calendario", Icons.Default.DateRange) {
-
+                    navController.navigate("calendario_doctor")
                 }
-
 
                 HomeDocAccesoItem("Pacientes", Icons.Default.List) {
                     navController.navigate("pacientes_lista")
@@ -144,7 +144,6 @@ fun HomeDoctorScreen(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.height(28.dp))
-
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -167,14 +166,12 @@ fun HomeDoctorScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(pacientesRecientes) { paciente ->
                     Column(modifier = Modifier.width(110.dp)) {
-
                         Box(
                             modifier = Modifier
                                 .size(width = 110.dp, height = 120.dp)

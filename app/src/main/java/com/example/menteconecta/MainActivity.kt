@@ -1,84 +1,67 @@
 package com.example.menteconecta
 
-import NotificacionesUno
-import PerfilScreen
-import QueEsMenteConecta
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.menteconecta.ui.theme.BottomNavigationBar
-import com.example.menteconecta.ui.theme.MenteconectaTheme
+import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // Protección para Firebase: Si falla al iniciar, no detiene la app, solo avisa
+        try {
+            FirebaseApp.initializeApp(this)
+            Log.d("APP_DEBUG", "Firebase inicializado con éxito")
+        } catch (e: Exception) {
+            Log.e("APP_DEBUG", "Error iniciando Firebase: ${e.message}")
+        }
+
         setContent {
-            MenteconectaTheme {
-                val navController = rememberNavController()
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentRoute = navBackStackEntry?.destination?.route
+            val navController = rememberNavController()
 
-                remember {
-                    UserSession.rolActivo = "paciente"
-                    UserSession.rolActivo
-                }
+            Scaffold { paddingValues ->
+                NavHost(
+                    navController = navController,
+                    startDestination = "login",
+                    modifier = Modifier.padding(paddingValues)
+                ) {
+                    // --- RUTAS DE ACCESO ---
+                    composable(route = "login") { LoginScreen(navController) }
 
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        if (currentRoute != "login") {
-                            BottomNavigationBar(navController = navController)
-                        }
+                    // --- RUTAS PACIENTE ---
+                    composable(route = "home_paciente") { HomeScreen(navController) }
+                    composable(route = "especialista") { EspecialistasScreen(navController) }
+                    composable(route = "notificaciones_paciente") { NotificacionesUno(navController) }
+                    composable(route = "perfil") { PerfilScreen(navController) }
+                    composable(route = "calendario") { Calendario(navController) }
+                    composable(route = "formulas") { FormulasScreen(navController) }
+                    composable(route = "psicologos_lista") { PsicologosScreen(navController) }
+                    composable(route = "psiquiatras_lista") { PsiquiatrasScreen(navController) }
+                    composable(route = "historia_clinica_paciente") { HistoriaClinica(navController) }
+                    composable(route = "que_es_menteconecta") { QueEsMenteConecta(navController) }
+
+                    // --- RUTAS DOCTOR ---
+                    composable(route = "home_doctor") { HomeDoctorScreen(navController) }
+                    composable(route = "calendario_doctor") { CalendarioDoctor(navController) }
+                    composable(route = "pacientes_lista") { PacientesListaScreen(navController) }
+                    composable(route = "formulas_doctor") { FormulasDoctorScreen(navController) }
+                    composable(route = "perfil_doctor") { PerfilDoctorScreen(navController) }
+
+                    composable(route = "historia_clinica_doctor/{pacienteNombre}") { backStackEntry ->
+                        val nombre = backStackEntry.arguments?.getString("pacienteNombre") ?: "Paciente"
+                        HistoriaClinicaDoctorScreen(navController = navController, pacienteNombre = nombre)
                     }
-                ) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = "login"
-                        ) {
 
-                            composable("login") { LoginScreen(navController) }
-
-
-                            composable("home") { HomeScreen(navController) }
-                            composable("notificaciones") { NotificacionesUno(navController) }
-                            composable("perfil") { PerfilScreen(navController) }
-                            composable("que_es_menteconecta") { QueEsMenteConecta(navController) }
-                            composable("calendario") { CalendarioScreen(navController) }
-                            composable("formulas") { FormulasScreen(navController) }
-                            composable("especialista") { EspecialistaScreen(navController) }
-                            composable("psicologos_lista") { PsicologosScreen(navController) }
-                            composable("psiquiatras_lista") { PsiquiatrasScreen(navController) }
-
-                            composable("historia_clinica_paciente") {
-                                HistoriaClinicaScreen(navController)
-                            }
-
-
-                            composable("home_doctor") { HomeDoctorScreen(navController) }
-                            composable("pacientes_lista") { PacientesListaScreen(navController) }
-
-                            composable("historia_clinica_doctor/{pacienteNombre}") { backStackEntry ->
-                                val nombre = backStackEntry.arguments?.getString("pacienteNombre") ?: "Paciente"
-
-
-                                HistoriaClinicaDoctorScreen(pacienteNombre = nombre, navController = navController)
-                            }
-                        }
-                    }
+                    composable(route = "notificaciones") { NotificacionesDos(navController) }
+                    composable(route = "notificaciones_dos") { NotificacionesDos(navController) }
                 }
             }
         }
