@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Protección para Firebase: Si falla al iniciar, no detiene la app, solo avisa
+
         try {
             FirebaseApp.initializeApp(this)
             Log.d("APP_DEBUG", "Firebase inicializado con éxito")
@@ -33,10 +33,9 @@ class MainActivity : ComponentActivity() {
                     startDestination = "login",
                     modifier = Modifier.padding(paddingValues)
                 ) {
-                    // --- RUTAS DE ACCESO ---
                     composable(route = "login") { LoginScreen(navController) }
 
-                    // --- RUTAS PACIENTE ---
+
                     composable(route = "home_paciente") { HomeScreen(navController) }
                     composable(route = "especialista") { EspecialistasScreen(navController) }
                     composable(route = "notificaciones_paciente") { NotificacionesUno(navController) }
@@ -48,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     composable(route = "historia_clinica_paciente") { HistoriaClinica(navController) }
                     composable(route = "que_es_menteconecta") { QueEsMenteConecta(navController) }
 
-                    // --- RUTAS DOCTOR ---
+
                     composable(route = "home_doctor") { HomeDoctorScreen(navController) }
                     composable(route = "calendario_doctor") { CalendarioDoctor(navController) }
                     composable(route = "pacientes_lista") { PacientesListaScreen(navController) }
