@@ -1,134 +1,140 @@
 package com.example.menteconecta
 
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-
-
-data class CitaDisponible(
-    val nombre: String,
-    val especialidad: String,
-    val fecha: String,
-    val hora: String,
-    val duracion: String
-)
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 @Composable
 fun PsicologosScreen(navController: NavController) {
-    val listaCitas = listOf(
-        CitaDisponible("LAURA GOMEZ", "Psicologa Clinica", "Viernes 7 de noviembre", "11:30am", "1 hora"),
-        CitaDisponible("LAURA GOMEZ", "Psicologa Clinica", "Martes 11 de noviembre", "11:30am", "1 hora"),
-        CitaDisponible("Margarita Paez", "Psicologa Clinica", "Viernes 7 de noviembre", "10:30am", "1 hora")
-    )
+    val context = LocalContext.current
+    val azulPrincipal = Color(0xFF1A237E)
+    val azulClaro = Color(0xFF2196F3)
+    val fondoApp = Color(0xFFF0F7F8)
 
-    Scaffold { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF0F7F8))
-                .padding(padding)
-                .padding(horizontal = 20.dp)
-        ) {
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = "Agenda tu cita",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
+    var listaHorarios by remember { mutableStateOf(listOf<HorarioDisponible>()) }
+    var cargando by remember { mutableStateOf(true) }
 
-            Spacer(modifier = Modifier.height(20.dp))
+    DisposableEffect(Unit) {
+        val databaseRef = FirebaseDatabase.getInstance().getReference("horarios_disponibles")
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val temporalList = mutableListOf<HorarioDisponible>()
+                for (data in snapshot.children) {
+                    val id = data.child("id").getValue(String::class.java) ?: ""
+                    val doctor = data.child("doctorNombre").getValue(String::class.java) ?: ""
+                    val esp = data.child("especialidad").getValue(String::class.java) ?: ""
+                    val fecha = data.child("fecha").getValue(String::class.java) ?: ""
+                    val hora = data.child("hora").getValue(String::class.java) ?: ""
+                    val duracion = data.child("duracion").getValue(String::class.java) ?: ""
 
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(listaCitas) { cita ->
-                    // USAMOS LA TARJETA QUE TIENE EL CLICKABLE
-                    TarjetaEspecialista(cita, navController)
+                    // Filtro estricto para psicólogos
+                    if (esp.equals("Psicologo", ignoreCase = true)) {
+                        temporalList.add(HorarioDisponible(id, doctor, esp, fecha, hora, duracion))
+                    }
                 }
+                listaHorarios = temporalList
+                cargando = false
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cargando = false
+                Toast.makeText(context, "Error al cargar horarios", Toast.LENGTH_SHORT).show()
             }
         }
+        databaseRef.addValueEventListener(listener)
+        onDispose { databaseRef.removeEventListener(listener) }
     }
-}
 
-@Composable
-fun TarjetaEspecialista(cita: CitaDisponible, navController: NavController) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
+    Column(modifier = Modifier.fillMaxSize().background(fondoApp).padding(16.dp)) {
+        Text("Agenda tu cita", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = azulPrincipal)
+        Text("Especialidad: Psicología", fontSize = 14.sp, color = Color.Gray)
+        Spacer(modifier = Modifier.height(16.dp))
 
-            .clickable {
-
+        if (cargando) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = azulClaro)
             }
-            .border(2.dp, Color(0xFF2196F3), RoundedCornerShape(15.dp)),
-        shape = RoundedCornerShape(15.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Surface(
-                modifier = Modifier
-                    .size(90.dp)
-                    .clip(RoundedCornerShape(10.dp)),
-                color = Color.LightGray
-            ) {
-
+        } else if (listaHorarios.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No hay citas de psicología disponibles.", color = Color.Gray)
             }
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                items(listaHorarios) { horario ->
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = CardDefaults.cardElevation(2.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(horario.doctorNombre, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = azulPrincipal)
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text("📅 FECHA: ${horario.fecha}", fontSize = 14.sp)
+                            Text("⏰ HORA: ${horario.hora}", fontSize = 14.sp)
+                            Text("⏳ Duración: ${horario.duracion}", fontSize = 14.sp)
 
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = cita.nombre, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color(0xFF1A237E))
-                Text(text = cita.especialidad, fontSize = 14.sp, color = Color.Gray)
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(text = "FECHA: ${cita.fecha}", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                Text(text = "HORA: ${cita.hora}", fontSize = 12.sp)
-                Text(text = "Duracion: ${cita.duracion}", fontSize = 12.sp)
-
-
-                Text(
-                    text = "Toca para agendar",
-                    color = Color(0xFF2196F3),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(top = 4.dp)
-                )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Button(
+                                onClick = {
+                                    val appointmentsRef = FirebaseDatabase.getInstance().getReference("citas_agendadas")
+                                    val citaId = appointmentsRef.push().key ?: ""
+                                    val datosCita = mapOf(
+                                        "citaId" to citaId,
+                                        "doctor" to horario.doctorNombre,
+                                        "fecha" to horario.fecha,
+                                        "hora" to horario.hora,
+                                        "especialidad" to horario.especialidad,
+                                        "pacienteNombre" to "Usuario Paciente"
+                                    )
+                                    appointmentsRef.child(citaId).setValue(datosCita).addOnSuccessListener {
+                                        FirebaseDatabase.getInstance().getReference("horarios_disponibles").child(horario.id).removeValue()
+                                        Toast.makeText(context, "¡Cita agendada con éxito!", Toast.LENGTH_LONG).show()
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = azulClaro),
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Text("AGENDAR", color = Color.White, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

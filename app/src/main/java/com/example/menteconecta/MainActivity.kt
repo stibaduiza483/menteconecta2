@@ -1,66 +1,80 @@
 package com.example.menteconecta
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.FirebaseApp
+import com.example.menteconecta.ui.theme.BottomNavigationBar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-        try {
-            FirebaseApp.initializeApp(this)
-            Log.d("APP_DEBUG", "Firebase inicializado con éxito")
-        } catch (e: Exception) {
-            Log.e("APP_DEBUG", "Error iniciando Firebase: ${e.message}")
-        }
-
         setContent {
-            val navController = rememberNavController()
-
-            Scaffold { paddingValues ->
-                NavHost(
-                    navController = navController,
-                    startDestination = "login",
-                    modifier = Modifier.padding(paddingValues)
+            MaterialTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    composable(route = "login") { LoginScreen(navController) }
+                    val navController = rememberNavController()
 
 
-                    composable(route = "home_paciente") { HomeScreen(navController) }
-                    composable(route = "especialista") { EspecialistasScreen(navController) }
-                    composable(route = "notificaciones_paciente") { NotificacionesUno(navController) }
-                    composable(route = "perfil") { PerfilScreen(navController) }
-                    composable(route = "calendario") { Calendario(navController) }
-                    composable(route = "formulas") { FormulasScreen(navController) }
-                    composable(route = "psicologos_lista") { PsicologosScreen(navController) }
-                    composable(route = "psiquiatras_lista") { PsiquiatrasScreen(navController) }
-                    composable(route = "historia_clinica_paciente") { HistoriaClinica(navController) }
-                    composable(route = "que_es_menteconecta") { QueEsMenteConecta(navController) }
+                    val navBackStackEntry = navController.currentBackStackEntryAsState()
+                    val rutaActual = navBackStackEntry.value?.destination?.route
 
+                    Scaffold(
+                        bottomBar = {
 
-                    composable(route = "home_doctor") { HomeDoctorScreen(navController) }
-                    composable(route = "calendario_doctor") { CalendarioDoctor(navController) }
-                    composable(route = "pacientes_lista") { PacientesListaScreen(navController) }
-                    composable(route = "formulas_doctor") { FormulasDoctorScreen(navController) }
-                    composable(route = "perfil_doctor") { PerfilDoctorScreen(navController) }
+                            if (rutaActual != "login" && rutaActual != null) {
+                                BottomNavigationBar(navController)
+                            }
+                        }
+                    ) { paddingValues ->
+                        NavHost(
+                            navController = navController,
+                            startDestination = "login",
+                            modifier = Modifier.padding(paddingValues)
+                        ) {
+                            composable("login") {
+                                LoginScreen(navController)
+                            }
+                            composable("home_paciente") {
+                                HomeScreen(navController)
+                            }
+                            composable("home_doctor") {
+                                HomeDoctorScreen(navController)
+                            }
+                            composable("asignacion_citas") {
+                                EscogeEspecialistaScreen(navController)
+                            }
 
-                    composable(route = "historia_clinica_doctor/{pacienteNombre}") { backStackEntry ->
-                        val nombre = backStackEntry.arguments?.getString("pacienteNombre") ?: "Paciente"
-                        HistoriaClinicaDoctorScreen(navController = navController, pacienteNombre = nombre)
+                            composable("agenda_cita/{tipoEspecialista}") { backStackEntry ->
+                                val tipo = backStackEntry.arguments?.getString("tipoEspecialista") ?: ""
+                                AgendaCitaScreen(navController, tipoEspecialista = tipo)
+                            }
+
+                            composable("calendario") {
+                                Calendario(navController)
+                            }
+                            composable("calendario_doctor") {
+                                CalendarioDoctor(navController)
+                            }
+                            composable("crear_horario") {
+                                CrearHorarioDoctor(navController)
+                            }
+                            composable("notificaciones_doctor") {
+                                NotificacionesDos(navController)
+                            }
+                        }
                     }
-
-                    composable(route = "notificaciones") { NotificacionesDos(navController) }
-                    composable(route = "notificaciones_dos") { NotificacionesDos(navController) }
                 }
             }
         }

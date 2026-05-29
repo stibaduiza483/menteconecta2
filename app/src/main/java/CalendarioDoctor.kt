@@ -83,7 +83,7 @@ fun CalendarioDoctor(navController: NavController) {
                             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                         ) {
                             Column(modifier = Modifier.padding(16.dp)) {
-                                Text("Paciente: ${cita.pacienteNombre}", style = MaterialTheme.typography.titleMedium)
+                                Text("Paciente: ${cita.doctorNombre}", style = MaterialTheme.typography.titleMedium)
                                 Text("Fecha: ${cita.fecha} - ${cita.hora}")
                                 Text("Motivo: ${cita.motivo}")
                             }

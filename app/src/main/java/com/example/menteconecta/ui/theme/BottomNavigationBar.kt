@@ -28,7 +28,7 @@ fun BottomNavigationBar(navController: NavController) {
         "pacientes_lista",
         "formulas_doctor",
         "historia_clinica_doctor/{pacienteNombre}",
-        "notificaciones",
+        "notificaciones_doctor",
         "perfil_doctor",
         "calendario_doctor"
     )
@@ -39,7 +39,7 @@ fun BottomNavigationBar(navController: NavController) {
         containerColor = Color.White
     ) {
         if (esDoctor) {
-
+            // ---- MENÚ DEL DOCTOR ----
             NavigationBarItem(
                 icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
                 label = { Text("Inicio") },
@@ -56,9 +56,9 @@ fun BottomNavigationBar(navController: NavController) {
             )
             NavigationBarItem(
                 icon = { Icon(Icons.Default.Notifications, contentDescription = "Alertas") },
-                label = { Text("Notificacion") },
-                selected = rutaActual == "notificacion",
-                onClick = { navController.navigate("notificacion") { launchSingleTop = true } },
+                label = { Text("Notificaciones") },
+                selected = rutaActual == "notificaciones_doctor", // Corregido e igualado
+                onClick = { navController.navigate("notificaciones_doctor") { launchSingleTop = true } }, // Redirección corregida
                 colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF0084FF))
             )
             NavigationBarItem(
@@ -70,10 +70,6 @@ fun BottomNavigationBar(navController: NavController) {
             )
         } else {
 
-
-
-
-
             NavigationBarItem(
                 icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
                 label = { Text("Inicio") },
@@ -81,8 +77,6 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = { navController.navigate("home_paciente") { launchSingleTop = true } },
                 colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF0084FF))
             )
-
-
             NavigationBarItem(
                 icon = { Icon(Icons.Default.CalendarMonth, contentDescription = "Citas") },
                 label = { Text("Calendario") },
@@ -90,8 +84,6 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = { navController.navigate("calendario") { launchSingleTop = true } },
                 colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF0084FF))
             )
-
-
             NavigationBarItem(
                 icon = { Icon(Icons.Default.Description, contentDescription = "Recetas") },
                 label = { Text("Fórmulas") },
@@ -99,8 +91,6 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = { navController.navigate("formulas") { launchSingleTop = true } },
                 colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF0084FF))
             )
-
-
             NavigationBarItem(
                 icon = { Icon(Icons.Default.Person, contentDescription = "Perfil") },
                 label = { Text("Perfil") },

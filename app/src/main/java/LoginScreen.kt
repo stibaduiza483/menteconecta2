@@ -1,7 +1,11 @@
 package com.example.menteconecta
 
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,13 +13,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,150 +28,169 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginScreen(navController: NavController) {
-    var esPacienteSelected by remember { mutableStateOf(true) }
+    val context = LocalContext.current
+    val azulPrincipal = Color(0xFF1A237E)
+    val azulClaro = Color(0xFF2196F3)
+    val fondoApp = Color(0xFFF0F7F8)
+
+
     var email by remember { mutableStateOf("") }
-    var contrasena by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var rolSeleccionado by remember { mutableStateOf("Paciente") } // "Paciente" o "Doctor"
+    var cargando by remember { mutableStateOf(false) }
 
-    val azulBrillante = Color(0xFF0084FF)
-    val azulOscuroTexto = Color(0xFF1A237E)
+    val auth = FirebaseAuth.getInstance()
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F9FC))
-            .padding(horizontal = 30.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .background(fondoApp),
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "MenteConecta",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = azulOscuroTexto
-        )
-
-        Text(
-            text = "Bienvenido",
-            fontSize = 18.sp,
-            color = azulOscuroTexto.copy(alpha = 0.7f),
-            modifier = Modifier.padding(top = 8.dp)
-        )
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Button(
-                onClick = { esPacienteSelected = true },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (esPacienteSelected) azulBrillante else Color(0xFFD0E3F7),
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.width(130.dp).height(42.dp)
+
+            Text(
+                text = "MenteConecta",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = azulPrincipal
+            )
+            Text(
+                text = "Bienvenido",
+                fontSize = 16.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+
+            Text(
+                text = "Selecciona tu rol de ingreso:",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                color = azulPrincipal,
+                modifier = Modifier.align(Alignment.Start)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text("Paciente", fontSize = 14.sp, fontWeight = FontWeight.Medium)
-            }
-
-            Spacer(modifier = Modifier.width(20.dp))
-
-            Button(
-                onClick = { esPacienteSelected = false },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (!esPacienteSelected) azulBrillante else Color(0xFFD0E3F7),
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.width(130.dp).height(42.dp)
-            ) {
-                Text("Especialista", fontSize = 14.sp, fontWeight = FontWeight.Medium)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(50.dp))
-
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            placeholder = { Text("email@domain.com", color = Color.White.copy(alpha = 0.8f)) },
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = azulBrillante,
-                unfocusedContainerColor = azulBrillante,
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.fillMaxWidth().height(54.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextField(
-            value = contrasena,
-            onValueChange = { contrasena = it },
-            placeholder = { Text("Contraseña", color = Color.White.copy(alpha = 0.8f)) },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = azulBrillante,
-                unfocusedContainerColor = azulBrillante,
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.fillMaxWidth().height(54.dp)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-
-        Button(
-            onClick = {
-                if (esPacienteSelected) {
-                    UserSession.rolActivo = "paciente"
-                    navController.navigate("home_paciente") { // Lleva al Home del Paciente
-                        popUpTo("login") { inclusive = true }
-                    }
-                } else {
-                    UserSession.rolActivo = "doctor"
-                    navController.navigate("home_doctor") { // Lleva al Home del Doctor
-                        popUpTo("login") { inclusive = true }
-                    }
+                val esPaciente = rolSeleccionado == "Paciente"
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(if (esPaciente) azulPrincipal else Color.White, RoundedCornerShape(10.dp))
+                        .border(1.dp, if (esPaciente) azulPrincipal else Color.LightGray, RoundedCornerShape(10.dp))
+                        .clickable { rolSeleccionado = "Paciente" }
+                        .padding(vertical = 12.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "👤 Paciente",
+                        color = if (esPaciente) Color.White else azulPrincipal,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-            shape = RoundedCornerShape(10.dp),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp),
-            modifier = Modifier.fillMaxWidth().height(50.dp)
-        ) {
-            Text("Continue", color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+
+                val esDoctor = rolSeleccionado == "Doctor"
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(if (esDoctor) azulPrincipal else Color.White, RoundedCornerShape(10.dp))
+                        .border(1.dp, if (esDoctor) azulPrincipal else Color.LightGray, RoundedCornerShape(10.dp))
+                        .clickable { rolSeleccionado = "Doctor" }
+                        .padding(vertical = 12.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "🩺 Especialista",
+                        color = if (esDoctor) Color.White else azulPrincipal,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Correo Electrónico") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                shape = RoundedCornerShape(10.dp)
+            )
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Contraseña") },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                shape = RoundedCornerShape(10.dp)
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+
+            Button(
+                onClick = {
+                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                        cargando = true
+                        auth.signInWithEmailAndPassword(email.trim(), password.trim())
+                            .addOnSuccessListener {
+                                cargando = false
+                                Toast.makeText(context, "¡Ingreso exitoso!", Toast.LENGTH_SHORT).show()
+
+
+                                if (rolSeleccionado == "Paciente") {
+                                    navController.navigate("home_paciente") {
+                                        popUpTo("login") { inclusive = true }
+                                    }
+                                } else {
+                                    navController.navigate("home_doctor") {
+                                        popUpTo("login") { inclusive = true }
+                                    }
+                                }
+                            }
+                            .addOnFailureListener { error ->
+                                cargando = false
+                                Toast.makeText(context, "Error: ${error.localizedMessage}", Toast.LENGTH_LONG).show()
+                            }
+                    } else {
+                        Toast.makeText(context, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = azulClaro),
+                enabled = !cargando
+            ) {
+                if (cargando) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                } else {
+                    Text("CONTINUAR", fontWeight = FontWeight.Bold, color = Color.White, fontSize = 16.sp)
+                }
+            }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "By clicking continue, you agree to our Terms of Service\nand Privacy Policy",
-            fontSize = 11.sp,
-            color = azulOscuroTexto.copy(alpha = 0.6f),
-            textAlign = TextAlign.Center,
-            lineHeight = 16.sp
-        )
     }
 }

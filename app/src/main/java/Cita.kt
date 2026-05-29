@@ -6,5 +6,6 @@ data class Cita(
     val doctorNombre: String = "",
     val fecha: String = "",
     val hora: String = "",
-    val motivo: String = ""
+    val motivo: String = "",
+    val disponible: Boolean = true,
 )
